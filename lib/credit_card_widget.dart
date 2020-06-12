@@ -9,6 +9,7 @@ class CreditCardWidget extends StatefulWidget {
     @required this.expiryDate,
     @required this.cardHolderName,
     @required this.cvvCode,
+    @required this.clientId,
     @required this.showBackView,
     this.animationDuration = const Duration(milliseconds: 500),
     this.height,
@@ -23,6 +24,7 @@ class CreditCardWidget extends StatefulWidget {
   final String expiryDate;
   final String cardHolderName;
   final String cvvCode;
+  final String clientId;
   final TextStyle textStyle;
   final Color cardBgColor;
   final bool showBackView;
@@ -138,19 +140,19 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   /// Builds a back container containing cvv
   ///
   Container buildBackContainer(
-    double width,
-    double height,
-    BuildContext context,
-    Orientation orientation,
-  ) {
+      double width,
+      double height,
+      BuildContext context,
+      Orientation orientation,
+      ) {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.title.merge(
-          TextStyle(
-            color: Colors.black,
-            fontFamily: 'halter',
-            fontSize: 16,
-            package: 'flutter_credit_card',
-          ),
-        );
+      TextStyle(
+        color: Colors.black,
+        fontFamily: 'halter',
+        fontSize: 16,
+        package: 'flutter_credit_card',
+      ),
+    );
 
     return Container(
       decoration: BoxDecoration(
@@ -224,6 +226,14 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              'Identifiant client : ${widget.clientId}',
+              style:
+              TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+            ),
+          ),
         ],
       ),
     );
@@ -234,19 +244,19 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   /// Card number, Exp. year and Card holder name
   ///
   Container buildFrontContainer(
-    double width,
-    double height,
-    BuildContext context,
-    Orientation orientation,
-  ) {
+      double width,
+      double height,
+      BuildContext context,
+      Orientation orientation,
+      ) {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.title.merge(
-          TextStyle(
-            color: Colors.white,
-            fontFamily: 'halter',
-            fontSize: 16,
-            package: 'flutter_credit_card',
-          ),
-        );
+      TextStyle(
+        color: Colors.white,
+        fontFamily: 'halter',
+        fontSize: 16,
+        package: 'flutter_credit_card',
+      ),
+    );
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -354,11 +364,11 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     }
 
     cardNumPatterns.forEach(
-      (CardType type, Set<List<String>> patterns) {
+          (CardType type, Set<List<String>> patterns) {
         for (List<String> patternRange in patterns) {
           // Remove any spaces
           String ccPatternStr =
-              cardNumber.replaceAll(RegExp(r'\s+\b|\b\s'), '');
+          cardNumber.replaceAll(RegExp(r'\s+\b|\b\s'), '');
           final int rangeLen = patternRange[0].length;
           // Trim the Credit Card number string to match the pattern prefix length
           if (rangeLen < cardNumber.length) {

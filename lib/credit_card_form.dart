@@ -11,6 +11,7 @@ class CreditCardForm extends StatefulWidget {
     this.expiryDate,
     this.cardHolderName,
     this.cvvCode,
+    this.clientId,
     @required this.onCreditCardModelChange,
     this.themeColor,
     this.textColor = Colors.black,
@@ -21,6 +22,7 @@ class CreditCardForm extends StatefulWidget {
   final String expiryDate;
   final String cardHolderName;
   final String cvvCode;
+  final String clientId;
   final void Function(CreditCardModel) onCreditCardModelChange;
   final Color themeColor;
   final Color textColor;
@@ -35,6 +37,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   String expiryDate;
   String cardHolderName;
   String cvvCode;
+  String clientId;
   bool isCvvFocused = false;
   Color themeColor;
 
@@ -42,18 +45,21 @@ class _CreditCardFormState extends State<CreditCardForm> {
   CreditCardModel creditCardModel;
 
   final MaskedTextController _cardNumberController =
-      MaskedTextController(mask: '0000 0000 0000 0000');
+  MaskedTextController(mask: '0000 0000 0000 0000');
   final TextEditingController _expiryDateController =
-      MaskedTextController(mask: '00/00');
+  MaskedTextController(mask: '00/00');
   final TextEditingController _cardHolderNameController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _cvvCodeController =
-      MaskedTextController(mask: '0000');
+  MaskedTextController(mask: '0000');
+  final TextEditingController _clientIdController = TextEditingController();
 
   FocusNode cvvFocusNode = FocusNode();
+  FocusNode clientIdFocusNode = FocusNode();
 
   void textFieldFocusDidChange() {
-    creditCardModel.isCvvFocused = cvvFocusNode.hasFocus;
+    creditCardModel.isCvvFocused =
+        cvvFocusNode.hasFocus || clientIdFocusNode.hasFocus;
     onCreditCardModelChange(creditCardModel);
   }
 
@@ -62,9 +68,10 @@ class _CreditCardFormState extends State<CreditCardForm> {
     expiryDate = widget.expiryDate ?? '';
     cardHolderName = widget.cardHolderName ?? '';
     cvvCode = widget.cvvCode ?? '';
+    clientId = widget.clientId ?? '';
 
-    creditCardModel = CreditCardModel(
-        cardNumber, expiryDate, cardHolderName, cvvCode, isCvvFocused);
+    creditCardModel = CreditCardModel(cardNumber, expiryDate, cardHolderName,
+        cvvCode, clientId, isCvvFocused);
   }
 
   @override
@@ -76,6 +83,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     onCreditCardModelChange = widget.onCreditCardModelChange;
 
     cvvFocusNode.addListener(textFieldFocusDidChange);
+    clientIdFocusNode.addListener(textFieldFocusDidChange);
 
     _cardNumberController.addListener(() {
       setState(() {
@@ -105,6 +113,22 @@ class _CreditCardFormState extends State<CreditCardForm> {
       setState(() {
         cvvCode = _cvvCodeController.text;
         creditCardModel.cvvCode = cvvCode;
+        onCreditCardModelChange(creditCardModel);
+      });
+    });
+
+    _cvvCodeController.addListener(() {
+      setState(() {
+        cvvCode = _cvvCodeController.text;
+        creditCardModel.cvvCode = cvvCode;
+        onCreditCardModelChange(creditCardModel);
+      });
+    });
+
+    _clientIdController.addListener(() {
+      setState(() {
+        clientId = _clientIdController.text;
+        creditCardModel.clientId = clientId;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -198,6 +222,25 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   border: OutlineInputBorder(),
                   labelText: 'Card Holder',
                 ),
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              margin: const EdgeInsets.only(left: 16, top: 8, right: 16),
+              child: TextFormField(
+                maxLength: 10,
+                focusNode: clientIdFocusNode,
+                controller: _clientIdController,
+                cursorColor: widget.cursorColor ?? themeColor,
+                style: TextStyle(
+                  color: widget.textColor,
+                ),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Client ID',
+                    hintText: "XXXXXXXXXX"),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
               ),
