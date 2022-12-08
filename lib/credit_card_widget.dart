@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 class CreditCardWidget extends StatefulWidget {
   const CreditCardWidget({
-    Key key,
-    @required this.cardNumber,
-    @required this.expiryDate,
-    @required this.cardHolderName,
-    @required this.cvvCode,
-    @required this.clientId,
-    @required this.showBackView,
+    Key? key,
+    required this.cardNumber,
+    required this.expiryDate,
+    required this.cardHolderName,
+    required this.cvvCode,
+    required this.clientId,
+    required this.showBackView,
     this.animationDuration = const Duration(milliseconds: 500),
     this.height,
     this.width,
@@ -25,12 +25,12 @@ class CreditCardWidget extends StatefulWidget {
   final String cardHolderName;
   final String cvvCode;
   final String clientId;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final Color cardBgColor;
   final bool showBackView;
   final Duration animationDuration;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
 
   @override
   _CreditCardWidgetState createState() => _CreditCardWidgetState();
@@ -38,10 +38,10 @@ class CreditCardWidget extends StatefulWidget {
 
 class _CreditCardWidgetState extends State<CreditCardWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> _frontRotation;
-  Animation<double> _backRotation;
-  Gradient backgroundGradientColor;
+  late AnimationController controller;
+  Animation<double>? _frontRotation;
+  Animation<double>? _backRotation;
+  Gradient? backgroundGradientColor;
 
   bool isAmex = false;
 
@@ -146,7 +146,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     Orientation orientation,
   ) {
     final TextStyle defaultTextStyle =
-        Theme.of(context).textTheme.headline6.merge(
+        Theme.of(context).textTheme.headline6!.merge(
               TextStyle(
                 color: Colors.black,
                 fontFamily: 'halter',
@@ -253,7 +253,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     Orientation orientation,
   ) {
     final TextStyle defaultTextStyle =
-        Theme.of(context).textTheme.headline6.merge(
+        Theme.of(context).textTheme.headline6!.merge(
               TextStyle(
                 color: Colors.white,
                 fontFamily: 'halter',
@@ -467,21 +467,21 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
 class AnimationCard extends StatelessWidget {
   const AnimationCard({
-    @required this.child,
-    @required this.animation,
+    required this.child,
+    required this.animation,
   });
 
   final Widget child;
-  final Animation<double> animation;
+  final Animation<double>? animation;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget child) {
+      animation: animation!,
+      builder: (BuildContext context, Widget? child) {
         final Matrix4 transform = Matrix4.identity();
         transform.setEntry(3, 2, 0.001);
-        transform.rotateY(animation.value);
+        transform.rotateY(animation!.value);
         return Transform(
           transform: transform,
           alignment: Alignment.center,
@@ -494,7 +494,7 @@ class AnimationCard extends StatelessWidget {
 }
 
 class MaskedTextController extends TextEditingController {
-  MaskedTextController({String text, this.mask, Map<String, RegExp> translator})
+  MaskedTextController({String? text, this.mask, Map<String, RegExp>? translator})
       : super(text: text) {
     this.translator = translator ?? MaskedTextController.getDefaultTranslator();
 
@@ -511,9 +511,9 @@ class MaskedTextController extends TextEditingController {
     updateText(this.text);
   }
 
-  String mask;
+  String? mask;
 
-  Map<String, RegExp> translator;
+  late Map<String, RegExp> translator;
 
   Function afterChange = (String previous, String next) {};
   Function beforeChange = (String previous, String next) {
@@ -564,7 +564,7 @@ class MaskedTextController extends TextEditingController {
     };
   }
 
-  String _applyMask(String mask, String value) {
+  String _applyMask(String? mask, String value) {
     String result = '';
 
     int maskCharIndex = 0;
@@ -572,7 +572,7 @@ class MaskedTextController extends TextEditingController {
 
     while (true) {
       // if mask is ended, break.
-      if (maskCharIndex == mask.length) {
+      if (maskCharIndex == mask!.length) {
         break;
       }
 
@@ -594,7 +594,7 @@ class MaskedTextController extends TextEditingController {
 
       // apply translator if match
       if (translator.containsKey(maskChar)) {
-        if (translator[maskChar].hasMatch(valueChar)) {
+        if (translator[maskChar]!.hasMatch(valueChar)) {
           result += valueChar;
           maskCharIndex += 1;
         }

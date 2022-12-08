@@ -6,43 +6,43 @@ import 'credit_card_model.dart';
 
 class CreditCardForm extends StatefulWidget {
   const CreditCardForm({
-    Key key,
+    Key? key,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
     this.cvvCode,
     this.clientId,
-    @required this.onCreditCardModelChange,
+    required this.onCreditCardModelChange,
     this.themeColor,
     this.textColor = Colors.black,
     this.cursorColor,
   }) : super(key: key);
 
-  final String cardNumber;
-  final String expiryDate;
-  final String cardHolderName;
-  final String cvvCode;
-  final String clientId;
-  final void Function(CreditCardModel) onCreditCardModelChange;
-  final Color themeColor;
+  final String? cardNumber;
+  final String? expiryDate;
+  final String? cardHolderName;
+  final String? cvvCode;
+  final String? clientId;
+  final void Function(CreditCardModel?) onCreditCardModelChange;
+  final Color? themeColor;
   final Color textColor;
-  final Color cursorColor;
+  final Color? cursorColor;
 
   @override
   _CreditCardFormState createState() => _CreditCardFormState();
 }
 
 class _CreditCardFormState extends State<CreditCardForm> {
-  String cardNumber;
-  String expiryDate;
-  String cardHolderName;
-  String cvvCode;
-  String clientId;
+  String? cardNumber;
+  String? expiryDate;
+  String? cardHolderName;
+  String? cvvCode;
+  String? clientId;
   bool isCvvFocused = false;
-  Color themeColor;
+  Color? themeColor;
 
-  void Function(CreditCardModel) onCreditCardModelChange;
-  CreditCardModel creditCardModel;
+  late void Function(CreditCardModel?) onCreditCardModelChange;
+  CreditCardModel? creditCardModel;
 
   final MaskedTextController _cardNumberController =
   MaskedTextController(mask: '0000 0000 0000 0000');
@@ -58,7 +58,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   FocusNode clientIdFocusNode = FocusNode();
 
   void textFieldFocusDidChange() {
-    creditCardModel.isCvvFocused =
+    creditCardModel!.isCvvFocused =
         cvvFocusNode.hasFocus || clientIdFocusNode.hasFocus;
     onCreditCardModelChange(creditCardModel);
   }
@@ -88,7 +88,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cardNumberController.addListener(() {
       setState(() {
         cardNumber = _cardNumberController.text;
-        creditCardModel.cardNumber = cardNumber;
+        creditCardModel!.cardNumber = cardNumber;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -96,7 +96,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _expiryDateController.addListener(() {
       setState(() {
         expiryDate = _expiryDateController.text;
-        creditCardModel.expiryDate = expiryDate;
+        creditCardModel!.expiryDate = expiryDate;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -104,7 +104,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cardHolderNameController.addListener(() {
       setState(() {
         cardHolderName = _cardHolderNameController.text;
-        creditCardModel.cardHolderName = cardHolderName;
+        creditCardModel!.cardHolderName = cardHolderName;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -112,7 +112,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cvvCodeController.addListener(() {
       setState(() {
         cvvCode = _cvvCodeController.text;
-        creditCardModel.cvvCode = cvvCode;
+        creditCardModel!.cvvCode = cvvCode;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -120,7 +120,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cvvCodeController.addListener(() {
       setState(() {
         cvvCode = _cvvCodeController.text;
-        creditCardModel.cvvCode = cvvCode;
+        creditCardModel!.cvvCode = cvvCode;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -128,7 +128,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _clientIdController.addListener(() {
       setState(() {
         clientId = _clientIdController.text;
-        creditCardModel.clientId = clientId;
+        creditCardModel!.clientId = clientId;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -144,7 +144,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
-        primaryColor: themeColor.withOpacity(0.8),
+        primaryColor: themeColor!.withOpacity(0.8),
         primaryColorDark: themeColor,
       ),
       child: Form(
